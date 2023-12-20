@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 import searchIcon from '../assets/search.png'
 import clearIcon from '../assets/clear.png'
@@ -13,28 +13,39 @@ export function WeatherIndex() {
     const WEATHER_KEY = 'e77e9c491b7e6b5a86130dfdda7e3e25'
     const [weatherIcon, setWeatherIcon] = useState(cloudIcon)
 
+    const cityInputRef = useRef(null)
+    const humidityRef = useRef(null)
+    const windRef = useRef(null)
+    const tempRef = useRef(null)
+    const locationRef = useRef(null)
+
     async function search() {
         const element = document.getElementsByClassName("city-input")
-        if (element[0].value === '') return 0
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&units=Metric&appid=${WEATHER_KEY}`
+        if (cityInputRef.current.value === '') return 0
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityInputRef.current.value}&units=Metric&appid=${WEATHER_KEY}`
 
         let res = await fetch(url)
         let data = await res.json()
 
-        const humidity = document.getElementsByClassName("humidity-percent")
-        const wind = document.getElementsByClassName("wind-rate")
-        const temp = document.getElementsByClassName("weather-temp")
-        const location = document.getElementsByClassName("weather-location")
-
-        humidity[0].innerHTML = data.main.humidity + " %"
-        wind[0].innerHTML = Math.floor(data.wind.speed) + " km/h"
-        temp[0].innerHTML = Math.floor(data.main.temp) + "°C"
-        location[0].innerHTML = data.name
+        humidityRef.current.innerHTML = data.main.humidity + " %"
+        windRef.current.innerHTML = Math.floor(data.wind.speed) + " km/h"
+        tempRef.current.innerHTML = Math.floor(data.main.temp) + "°C"
+        locationRef.current.innerHTML = data.name
 
         if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") setWeatherIcon(clearIcon)
         else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") setWeatherIcon(cloudIcon)
-        else if (data.weather[0].icon === "03d" || data.weather[0].icon === "03n" || data.weather[0].icon === "04d" || data.weather[0].icon === "04n") setWeatherIcon(drizzleIcon)
-        else if (data.weather[0].icon === "09d" || data.weather[0].icon === "09n" || data.weather[0].icon === "10d" || data.weather[0].icon === "10n") setWeatherIcon(rainIcon)
+        else if (
+            data.weather[0].icon === "03d" ||
+            data.weather[0].icon === "03n" ||
+            data.weather[0].icon === "04d" ||
+            data.weather[0].icon === "04n"
+        ) setWeatherIcon(drizzleIcon)
+        else if (
+            data.weather[0].icon === "09d" ||
+            data.weather[0].icon === "09n" ||
+            data.weather[0].icon === "10d" ||
+            data.weather[0].icon === "10n"
+        ) setWeatherIcon(rainIcon)
         else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
         else setWeatherIcon(clearIcon)
     }
@@ -46,6 +57,7 @@ export function WeatherIndex() {
                     type="text"
                     className="city-input"
                     placeholder='Search'
+                    ref={cityInputRef}
                 />
 
                 <div
@@ -59,17 +71,20 @@ export function WeatherIndex() {
             <div className="weather-img">
                 <img src={weatherIcon} alt="Weather image" />
             </div>
-            <div className="weather-temp">
-                24c
+
+            <div className="weather-temp" ref={tempRef}>
+                24°C
             </div>
-            <div className="weather-location">
+
+            <div className="weather-location" ref={locationRef}>
                 London
             </div>
+
             <div className="data-container">
                 <div className="element">
-                    <img src={humidityIcon} alt="" className="Humidity icon" />
+                    <img src={humidityIcon} alt="Humidity icon" className="humidity icon" />
                     <div className="data">
-                        <div className="humidity-percent">
+                        <div className="humidity-percent" ref={humidityRef}>
                             64%
                         </div>
                         <div className="text">
@@ -78,9 +93,9 @@ export function WeatherIndex() {
                     </div>
                 </div>
                 <div className="element">
-                    <img src={windIcon} alt="" className="Wind icon" />
+                    <img src={windIcon} alt="Wind icon" className="wind icon" />
                     <div className="data">
-                        <div className="wind-rate">
+                        <div className="wind-rate" ref={windRef}>
                             18 km/h
                         </div>
                         <div className="text">
