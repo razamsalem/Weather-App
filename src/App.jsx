@@ -1,10 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react'
+import { Routes, Route } from 'react-router'
+import { WeatherIndex } from './views/WeatherIndex'
 
 function App() {
 
   return (
-    <h1>Header</h1>
+    <div>
+      <main>
+        <Routes>
+          <Route path="/" element={<WeatherIndex />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 
