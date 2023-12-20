@@ -8,9 +8,11 @@ import rainIcon from '../assets/rain.png'
 import snowIcon from '../assets/snow.png'
 import windIcon from '../assets/wind.png'
 import humidityIcon from '../assets/humidity.png'
+import { useEffect } from 'react'
 
 export function WeatherIndex() {
     const WEATHER_KEY = 'e77e9c491b7e6b5a86130dfdda7e3e25'
+    const [initialSearch, setInitialSearch] = useState(true)
     const [weatherIcon, setWeatherIcon] = useState(cloudIcon)
 
     const cityInputRef = useRef(null)
@@ -19,35 +21,117 @@ export function WeatherIndex() {
     const tempRef = useRef(null)
     const locationRef = useRef(null)
 
+    useEffect(() => {
+        if (initialSearch) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords
+                    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=Metric&appid=${WEATHER_KEY}`
+                    try {
+                        let res = await fetch(url)
+                        let data = await res.json()
+    
+                        humidityRef.current.innerHTML = data.main.humidity + ' %'
+                        windRef.current.innerHTML = Math.floor(data.wind.speed) + ' km/h'
+                        tempRef.current.innerHTML = Math.floor(data.main.temp) + '°C'
+                        locationRef.current.innerHTML = data.name
+    
+                        if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") setWeatherIcon(clearIcon)
+                        else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") setWeatherIcon(cloudIcon)
+                        else if (
+                            data.weather[0].icon === "03d" ||
+                            data.weather[0].icon === "03n" ||
+                            data.weather[0].icon === "04d" ||
+                            data.weather[0].icon === "04n"
+                        ) setWeatherIcon(drizzleIcon)
+                        else if (
+                            data.weather[0].icon === "09d" ||
+                            data.weather[0].icon === "09n" ||
+                            data.weather[0].icon === "10d" ||
+                            data.weather[0].icon === "10n"
+                        ) setWeatherIcon(rainIcon)
+                        else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
+                        else setWeatherIcon(clearIcon)
+    
+                        setInitialSearch(false)
+                    } catch (err) {
+                        console.error('Error getting location:', err)
+                        setInitialSearch(false)
+                    }
+                }
+            )
+        }
+    }, [initialSearch])
+
+    async function setWeatherToDefault() {
+        const defaultUrl = `https://api.openweathermap.org/data/2.5/weather?q=New York&units=Metric&appid=${WEATHER_KEY}`
+
+        try {
+            let defaultRes = await fetch(defaultUrl)
+            let defaultData = await defaultRes.json()
+
+            humidityRef.current.innerHTML = defaultData.main.humidity + ' %'
+            windRef.current.innerHTML = Math.floor(defaultData.wind.speed) + ' km/h'
+            tempRef.current.innerHTML = Math.floor(defaultData.main.temp) + '°C'
+            locationRef.current.innerHTML = defaultData.name
+
+            if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") setWeatherIcon(clearIcon)
+            else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") setWeatherIcon(cloudIcon)
+            else if (
+                data.weather[0].icon === "03d" ||
+                data.weather[0].icon === "03n" ||
+                data.weather[0].icon === "04d" ||
+                data.weather[0].icon === "04n"
+            ) setWeatherIcon(drizzleIcon)
+            else if (
+                data.weather[0].icon === "09d" ||
+                data.weather[0].icon === "09n" ||
+                data.weather[0].icon === "10d" ||
+                data.weather[0].icon === "10n"
+            ) setWeatherIcon(rainIcon)
+            else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
+            else setWeatherIcon(clearIcon)
+
+            setInitialSearch(false)
+        } catch (err) {
+            console.error('Error fetching default weather data:', error);
+        }
+    }
+
     async function search() {
-        const element = document.getElementsByClassName("city-input")
         if (cityInputRef.current.value === '') return 0
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityInputRef.current.value}&units=Metric&appid=${WEATHER_KEY}`
 
-        let res = await fetch(url)
-        let data = await res.json()
-
-        humidityRef.current.innerHTML = data.main.humidity + " %"
-        windRef.current.innerHTML = Math.floor(data.wind.speed) + " km/h"
-        tempRef.current.innerHTML = Math.floor(data.main.temp) + "°C"
-        locationRef.current.innerHTML = data.name
-
-        if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") setWeatherIcon(clearIcon)
-        else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") setWeatherIcon(cloudIcon)
-        else if (
-            data.weather[0].icon === "03d" ||
-            data.weather[0].icon === "03n" ||
-            data.weather[0].icon === "04d" ||
-            data.weather[0].icon === "04n"
-        ) setWeatherIcon(drizzleIcon)
-        else if (
-            data.weather[0].icon === "09d" ||
-            data.weather[0].icon === "09n" ||
-            data.weather[0].icon === "10d" ||
-            data.weather[0].icon === "10n"
-        ) setWeatherIcon(rainIcon)
-        else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
-        else setWeatherIcon(clearIcon)
+        try {
+            let res = await fetch(url)
+            let data = await res.json()
+    
+            humidityRef.current.innerHTML = data.main.humidity + " %"
+            windRef.current.innerHTML = Math.floor(data.wind.speed) + " km/h"
+            tempRef.current.innerHTML = Math.floor(data.main.temp) + "°C"
+            locationRef.current.innerHTML = data.name
+    
+            if (data.weather[0].icon === "01d" || data.weather[0].icon === "01n") setWeatherIcon(clearIcon)
+            else if (data.weather[0].icon === "02d" || data.weather[0].icon === "02n") setWeatherIcon(cloudIcon)
+            else if (
+                data.weather[0].icon === "03d" ||
+                data.weather[0].icon === "03n" ||
+                data.weather[0].icon === "04d" ||
+                data.weather[0].icon === "04n"
+            ) setWeatherIcon(drizzleIcon)
+            else if (
+                data.weather[0].icon === "09d" ||
+                data.weather[0].icon === "09n" ||
+                data.weather[0].icon === "10d" ||
+                data.weather[0].icon === "10n"
+            ) setWeatherIcon(rainIcon)
+            else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
+            else setWeatherIcon(clearIcon)
+        } catch(err) {
+            console.error('Error fetching weather data:', error)
+            setWeatherToDefault()
+        }
+      
     }
 
     return (
