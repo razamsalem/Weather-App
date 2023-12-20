@@ -45,6 +45,11 @@ body {
             
             background: $clr-light-2;
             cursor: pointer;
+            transition: .4s;
+
+            &:hover {
+                background: $clr-light-1-hover;
+            }
         }
     }
 
