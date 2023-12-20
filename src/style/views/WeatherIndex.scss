@@ -1,0 +1,46 @@
+.weather-container {
+    width: rem(607px);
+    height: rem(829px); 
+    border-radius: rem(12px);
+    background-image: linear-gradient(180deg, $clr-dark 0%, $clr-light 100%);
+  
+    margin: auto;
+    margin-block-start: rem(75px);
+
+    .top-bar {
+        display: flex;
+        gap: rem(14px);
+        justify-content: center;
+        padding-block-start: rem(60px);
+
+        input {
+            display: flex;
+            font-size: rem(20px);
+            font-weight: 400;
+
+            width: rem(362px);
+            height: rem(78px);
+            padding-inline-start: rem(40px);
+            border: none;
+            border-radius: rem(40px);
+            outline: none;
+            
+            color: $clr-light-1;
+            background: $clr-light-2;
+        }
+    }
+
+    .search-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: rem(78px);
+        height: rem(78px);
+        border-radius: rem(40px);
+        
+        background: $clr-light-2;
+        cursor: pointer;
+    }
+
+}
