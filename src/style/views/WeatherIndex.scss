@@ -28,19 +28,69 @@
             color: $clr-light-1;
             background: $clr-light-2;
         }
+
+        .search-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    
+            width: rem(78px);
+            height: rem(78px);
+            border-radius: rem(40px);
+            
+            background: $clr-light-2;
+            cursor: pointer;
+        }
     }
 
-    .search-icon {
+    .weather-img {
         display: flex;
         justify-content: center;
-        align-items: center;
+        margin-block-start: rem(29px);
+    }
+    .weather-temp {
+        display: flex;
+        justify-content: center;
 
-        width: rem(78px);
-        height: rem(78px);
-        border-radius: rem(40px);
+        font-weight: 400;
+        font-size: rem(120px);
+        color: $clr-light-2;
+    }
+    .weather-location {
+        display: flex;
+        justify-content: center;
         
-        background: $clr-light-2;
-        cursor: pointer;
+        font-weight: 400;
+        font-size: rem(60px);
+        color: $clr-light-2;
     }
 
+    .data-container {
+        display: flex;
+        justify-content: center;
+
+        margin-block-start: rem(50px);
+        color: $clr-light-2;
+
+        .element {
+            margin: auto;
+            display: flex;
+            gap: rem(12px);
+            align-items: flex-start;
+           
+            .icon {
+                margin-block-start: rem(10px);
+            }
+
+            .data {
+                font-size: rem(34px);
+                font-weight: 400;
+
+                .text {
+                    font-size: rem(20px);
+                    font-weight: 400;
+                }
+            }
+        }
+    }
 }
