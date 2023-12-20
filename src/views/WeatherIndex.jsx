@@ -127,12 +127,20 @@ export function WeatherIndex() {
             ) setWeatherIcon(rainIcon)
             else if (data.weather[0].icon === "13d" || data.weather[0].icon === "13n") setWeatherIcon(snowIcon)
             else setWeatherIcon(clearIcon)
+            cityInputRef.current.value = ''
         } catch(err) {
             console.error('Error fetching weather data:', error)
             setWeatherToDefault()
         }
       
     }
+
+    async function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            await search()
+        }
+    }
+
 
     return (
         <div className='weather-container'>
@@ -142,6 +150,7 @@ export function WeatherIndex() {
                     className="city-input"
                     placeholder='Search'
                     ref={cityInputRef}
+                    onKeyPress={handleKeyPress}
                 />
 
                 <div
