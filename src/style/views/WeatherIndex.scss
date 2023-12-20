@@ -1,8 +1,13 @@
+body {
+    background-image: linear-gradient(180deg, $clr-dark 0%, $clr-light 100%);
+    height: 100vh;
+    overflow: hidden;
+}
+
 .weather-container {
     width: rem(607px);
     height: rem(829px); 
     border-radius: rem(12px);
-    background-image: linear-gradient(180deg, $clr-dark 0%, $clr-light 100%);
   
     margin: auto;
     margin-block-start: rem(75px);
