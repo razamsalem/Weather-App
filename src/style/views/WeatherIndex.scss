@@ -12,6 +12,11 @@ body {
     margin: auto;
     margin-block-start: rem(75px);
 
+    @media only screen and (max-width: 600px) {
+        width: 100%;
+        height: auto;
+    }
+
     .top-bar {
         display: flex;
         gap: rem(14px);
@@ -32,6 +37,10 @@ body {
             
             color: $clr-light-1;
             background: $clr-light-2;
+
+            @media only screen and (max-width: 600px) {
+                width: 100%;
+            }
         }
 
         .search-icon {
